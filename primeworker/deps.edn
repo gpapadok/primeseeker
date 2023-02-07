@@ -1,0 +1,17 @@
+{:paths
+ ["src"]
+
+ :deps
+ {org.clojure/clojure               {:mvn/version "1.11.1"}
+  clj-http/clj-http                 {:mvn/version "3.12.3"}
+  fermat-primality/fermat-primality {:local/root "../fermat-primality"}}
+ 
+ :aliases
+ {:run  {:main-opts ["--main" "primeworker.core"]}
+
+  :test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                       :sha "9e35c979860c75555adaff7600070c60004a0f44"}}
+         :main-opts ["--main" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test}}}

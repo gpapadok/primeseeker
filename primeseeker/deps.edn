@@ -1,0 +1,19 @@
+{:paths
+ ["src" "resources"]
+
+ :deps
+ {org.clojure/clojure        {:mvn/version "1.11.1"}
+  ring/ring                  {:mvn/version "1.8.2"}
+  metosin/ring-http-response {:mvn/version "0.9.1"}
+  metosin/reitit             {:mvn/version "0.5.11"}
+  integrant/integrant        {:mvn/version "0.8.0"}}
+
+ :aliases
+ {:run {:main-opts ["--main" "primeseeker.core"]}
+
+  :test {:extra-paths ["test"]
+         :extra-deps  {io.github.cognitect-labs/test-runner
+                       {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                        :sha     "9e35c979860c75555adaff7600070c60004a0f44"}}
+         :main-opts   ["--main" "cognitect.test-runner"]
+         :exec-fn     cognitect.test-runner.api/test}}}
