@@ -9,13 +9,6 @@
 (def config
   (ig/read-string (slurp "resources/config.edn")))
 
-;; (defn wrap-edn
-;;   [handler]
-;;   (fn [request]
-;;     (-> request
-;;         handler
-;;         (assoc-in [:headers "Content-type"] "application/edn"))))
-
 (defmethod ig/init-key :server/jetty [_ {:keys [port] :as opts}]
   (jetty/run-jetty
    (-> handler

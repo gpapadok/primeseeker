@@ -14,13 +14,10 @@
      :body   {:number n}}
     {:status 404}))
 
-;; FIX THIS
 (defn update-number-status
   [request]
   (let [n        (get-in request [:body-params :number])
         is-prime (get-in request [:body-params :prime?])]
-    ;; (prn 'mitsos n is-prime)
-    (prn 'reset)
     (primes/update-number! n is-prime)
     {:status 200
      :body   {:message "Update successful"}}))

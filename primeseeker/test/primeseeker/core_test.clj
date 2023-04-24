@@ -22,4 +22,3 @@
 (deftest test-get-first-available
   (testing "test nil value"
     (is (-> (get-first-available) vals first nil?))))
-
