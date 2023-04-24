@@ -29,3 +29,7 @@
 
 (defn reset [& args]
   (halt!) (go))
+
+(defn -main
+  [& args]
+  (go))
