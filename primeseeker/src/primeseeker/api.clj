@@ -11,16 +11,21 @@
   [request]
   (if-let [n (primes/allocate-number-to-worker!)]
     {:status 200
-     :body   {:number n}}
+     :body   n}
     {:status 404}))
 
 (defn update-number-status
   [request]
   (let [n        (get-in request [:body-params :number])
-        is-prime (get-in request [:body-params :prime?])]
-    (primes/update-number! n is-prime)
-    {:status 200
-     :body   {:message "Update successful"}}))
+        is-prime (get-in request [:body-params :prime?])
+        proc-id  (get-in request [:body-params :proc-id])]
+    (if (primes/matching-number-proc-id n proc-id)
+      (do
+        (primes/update-number! n is-prime)
+        {:status 200
+         :body   {:message "Update successful"}})
+      {:status 400
+       :body   {:message "Invalid id for number"}})))
 
 (defn get-primes-db
   [request]

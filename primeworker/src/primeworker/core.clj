@@ -17,8 +17,7 @@
     (-> url
         (client/get {:accept :edn})
         :body
-        edn/read-string
-        :number)))
+        edn/read-string)))
 
 (defn send-result
   [n is-prime]
@@ -27,7 +26,7 @@
                   ":"
                   (:port primeseeker-server)
                   "/work")
-        body {:number n :prime? is-prime}]
+        body (assoc n :prime? is-prime)]
     (client/post url
                  {:body         (pr-str body)
                   :content-type :edn
@@ -37,8 +36,8 @@
   [& args]
   (println "Starting PrimeSeek worker...")
   (loop [n (request-number)]
-    (println "Beginning Fermat Primality Test for" n)
-    (send-result n (probable-prime? n 1))
+    (println "Beginning Fermat Primality Test for" (:number n))
+    (send-result n (probable-prime? (:number n) 1))
     (println "Done...")
     (println "Requesting next number.")
     (recur (request-number))))

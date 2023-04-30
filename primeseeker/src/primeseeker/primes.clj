@@ -35,14 +35,22 @@
     first-available
     (create-and-add-number!)))
 
+(defn matching-number-proc-id
+  [number proc-id]
+  (let [db-entry (index-db number)]
+    (and (:processing db-entry) (= proc-id (:proc-id db-entry)))))
+
 (defn allocate-number-to-worker!
   []
-  (let [next-number (get-first-available)]
+  (let [uuid        (java.util.UUID/randomUUID)
+        next-number (get-first-available)]
     (swap! primes-db
            (fn [primes-col n]
-             (assoc primes-col n {:processing true}))
+             (assoc primes-col n {:processing true
+                                  :proc-id    uuid}))
            next-number)
-    next-number))
+    {:proc-id uuid
+     :number  next-number}))
 
 (defn update-number!
   [n is-prime]
