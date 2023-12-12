@@ -1,7 +1,6 @@
 (ns primeseeker.api
   (:require [primeseeker.primes :as primes]))
 
-
 (defn index
   [request]
   {:status 200
@@ -29,7 +28,5 @@
 
 (defn get-primes-db
   [request]
-  (if-let [primes-db @primes/primes-db]
-    {:status 200
-     :body   @primes/primes-db}
-    {:status 404}))
+  {:status 200
+   :body   (primes/get-all-numbers)})
