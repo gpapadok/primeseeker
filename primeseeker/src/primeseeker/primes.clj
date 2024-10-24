@@ -11,7 +11,7 @@
 (defn- ds-execute! [& query]
   (jdbc/execute! @ds query {:builder-fn rs/as-unqualified-kebab-maps}))
 
-(defn index-db [n]
+(defn- index-db [n]
   (ds-execute! "select * from prime where number = ?" n))
 
 (defn get-all-numbers []
@@ -20,17 +20,17 @@
 (defn- add-number! [p]
   (ds-execute! "insert into prime (number, is_prime) values (?, null)" p))
 
-(defn all-numbers []
+(defn- all-numbers []
   (mapv :number (ds-execute! "select number from prime")))
 
-(defn create-and-add-number! []
+(defn- create-and-add-number! []
   (let [numbers     (all-numbers)
         max-n       (apply max numbers)
         next-number (+ max-n 2)]
     (add-number! next-number)
     next-number))
 
-(defn first-available []
+(defn- first-available []
   (let [unprocessed (->> (ds-execute! "select number from prime where is_prime is null")
                          (mapv :number)
                          set)
@@ -42,7 +42,7 @@
                                             processing)]
     (and (seq available) (apply min available))))
 
-(defn get-first-available []
+(defn- get-first-available []
   (or (first-available) (create-and-add-number!)))
 
 (defn matching-number-proc-id [number proc-id]
