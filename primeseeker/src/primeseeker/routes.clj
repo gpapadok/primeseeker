@@ -4,7 +4,7 @@
 
 (def routes
   [["/api"
-    ["/" {:get api/index}]
+    ["" {:get api/index}]
     ["/primes" {:get {:name    :get-primes-db
                       :handler api/get-primes-db}}]
     ["/work" {:get  {:name    :allocate-number
