@@ -50,8 +50,8 @@
                          (map first)
                          set)
         available   (clojure.set/difference unprocessed
-                                          processing)]
-      (and (seq available) (apply min available))))
+                                            processing)]
+    (and (seq available) (apply min available))))
 
 (defn get-first-available
   []
