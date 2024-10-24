@@ -16,4 +16,5 @@
 
 (def handler
   (reitit/ring-handler
-   (reitit/router routes)))
+   (reitit/router routes)
+   (constantly {:status 404 :body {:message "Not found"}})))
