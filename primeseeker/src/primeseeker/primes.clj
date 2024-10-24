@@ -4,24 +4,24 @@
 
 (def db {:dbtype "sqlite" :dbname "primes"})
 
-(def ds (jdbc/get-datasource db))
+(def ds (delay (jdbc/get-datasource db)))
 
 (def primes-db (atom {}))
 
 (defn index-db
   [n]
-  (jdbc/execute! ds ["
+  (jdbc/execute! @ds ["
 select * from prime where number = ?
 " n] {:builder-fn rs/as-unqualified-kebab-maps}))
 
 (defn get-all-numbers
   []
-  (jdbc/execute! ds ["select * from prime"]
+  (jdbc/execute! @ds ["select * from prime"]
                  {:builder-fn rs/as-unqualified-kebab-maps}))
 
 (defn- add-number!
   [p]
-  (jdbc/execute! ds ["
+  (jdbc/execute! @ds ["
 insert into prime (number, is_prime)
 values (?, null)
 " p]))
@@ -29,7 +29,7 @@ values (?, null)
 (defn all-numbers
   []
   (mapv :number
-        (jdbc/execute! ds ["select number from prime"]
+        (jdbc/execute! @ds ["select number from prime"]
                        {:builder-fn rs/as-unqualified-lower-maps})))
 
 (defn create-and-add-number!
@@ -42,7 +42,7 @@ values (?, null)
 
 (defn first-available
   []
-  (let [unprocessed (->> (jdbc/execute! ds ["
+  (let [unprocessed (->> (jdbc/execute! @ds ["
 select number from prime where is_prime is null
 "] {:builder-fn rs/as-unqualified-kebab-maps})
                          (mapv :number)
@@ -78,7 +78,7 @@ select number from prime where is_prime is null
 
 (defn update-number!
   [n is-prime]
-  (jdbc/execute! ds ["
+  (jdbc/execute! @ds ["
 update prime
 set is_prime = ?
 where number = ?
