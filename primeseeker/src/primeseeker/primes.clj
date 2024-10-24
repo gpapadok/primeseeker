@@ -82,4 +82,5 @@ select number from prime where is_prime is null
 update prime
 set is_prime = ?
 where number = ?
-" is-prime n]))
+" is-prime n])
+  (swap! primes-db #(dissoc % n)))
