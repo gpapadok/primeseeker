@@ -8,28 +8,24 @@
 
 (def primes-db (atom {}))
 
+(defn- ds-execute! [& query]
+  (jdbc/execute! @ds query {:builder-fn rs/as-unqualified-kebab-maps}))
+
 (defn index-db
   [n]
-  (let [query "select * from prime where number = ?"]
-    (jdbc/execute! @ds [query n] {:builder-fn rs/as-unqualified-kebab-maps})))
+  (ds-execute! "select * from prime where number = ?" n))
 
 (defn get-all-numbers
   []
-  (let [query "select * from prime"]
-    (jdbc/execute! @ds [query]
-                   {:builder-fn rs/as-unqualified-kebab-maps})))
+  (ds-execute! "select * from prime"))
 
 (defn- add-number!
   [p]
-  (let [query "insert into prime (number, is_prime) values (?, null)"]
-    (jdbc/execute! @ds [query p])))
+  (ds-execute! "insert into prime (number, is_prime) values (?, null)" p))
 
 (defn all-numbers
   []
-  (let [query "select number from prime"]
-    (mapv :number
-          (jdbc/execute! @ds [query]
-                         {:builder-fn rs/as-unqualified-lower-maps}))))
+  (mapv :number (ds-execute! "select number from prime")))
 
 (defn create-and-add-number!
   []
@@ -41,8 +37,7 @@
 
 (defn first-available
   []
-  (let [query       "select number from prime where is_prime is null"
-        unprocessed (->> (jdbc/execute! @ds [query] {:builder-fn rs/as-unqualified-kebab-maps})
+  (let [unprocessed (->> (ds-execute! "select number from prime where is_prime is null")
                          (mapv :number)
                          set)
         processing  (->> @primes-db
@@ -76,6 +71,5 @@
 
 (defn update-number!
   [n is-prime]
-  (let [query "update prime set is_prime = ? where number = ?"]
-    (jdbc/execute! @ds [query is-prime n])
-    (swap! primes-db #(dissoc % n))))
+  (ds-execute! "update prime set is_prime = ? where number = ?" is-prime n)
+  (swap! primes-db #(dissoc % n)))
