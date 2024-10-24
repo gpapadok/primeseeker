@@ -10,27 +10,26 @@
 
 (defn index-db
   [n]
-  (jdbc/execute! @ds ["
-select * from prime where number = ?
-" n] {:builder-fn rs/as-unqualified-kebab-maps}))
+  (let [query "select * from prime where number = ?"]
+    (jdbc/execute! @ds [query n] {:builder-fn rs/as-unqualified-kebab-maps})))
 
 (defn get-all-numbers
   []
-  (jdbc/execute! @ds ["select * from prime"]
-                 {:builder-fn rs/as-unqualified-kebab-maps}))
+  (let [query "select * from prime"]
+    (jdbc/execute! @ds [query]
+                   {:builder-fn rs/as-unqualified-kebab-maps})))
 
 (defn- add-number!
   [p]
-  (jdbc/execute! @ds ["
-insert into prime (number, is_prime)
-values (?, null)
-" p]))
+  (let [query "insert into prime (number, is_prime) values (?, null)"]
+    (jdbc/execute! @ds [query p])))
 
 (defn all-numbers
   []
-  (mapv :number
-        (jdbc/execute! @ds ["select number from prime"]
-                       {:builder-fn rs/as-unqualified-lower-maps})))
+  (let [query "select number from prime"]
+    (mapv :number
+          (jdbc/execute! @ds [query]
+                         {:builder-fn rs/as-unqualified-lower-maps}))))
 
 (defn create-and-add-number!
   []
@@ -42,16 +41,15 @@ values (?, null)
 
 (defn first-available
   []
-  (let [unprocessed (->> (jdbc/execute! @ds ["
-select number from prime where is_prime is null
-"] {:builder-fn rs/as-unqualified-kebab-maps})
+  (let [query       "select number from prime where is_prime is null"
+        unprocessed (->> (jdbc/execute! @ds [query] {:builder-fn rs/as-unqualified-kebab-maps})
                          (mapv :number)
                          set)
         processing  (->> @primes-db
                          (filter (fn [[n m]] (:processing m)))
                          (map first)
                          set)
-        available (clojure.set/difference unprocessed
+        available   (clojure.set/difference unprocessed
                                           processing)]
       (and (seq available) (apply min available))))
 
@@ -78,9 +76,6 @@ select number from prime where is_prime is null
 
 (defn update-number!
   [n is-prime]
-  (jdbc/execute! @ds ["
-update prime
-set is_prime = ?
-where number = ?
-" is-prime n])
-  (swap! primes-db #(dissoc % n)))
+  (let [query "update prime set is_prime = ? where number = ?"]
+    (jdbc/execute! @ds [query is-prime n])
+    (swap! primes-db #(dissoc % n))))
