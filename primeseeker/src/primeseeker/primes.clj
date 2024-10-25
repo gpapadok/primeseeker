@@ -4,7 +4,16 @@
 
 (def db {:dbtype "sqlite" :dbname "primes"})
 
-(def primes-db (atom {}))
+(let [cache (atom {})]
+  (defn cache-insert [number uuid]
+    (swap! cache
+           #(assoc % number {:processing true
+                             :proc-id    uuid})))
+  (defn cache-delete [number]
+    (swap! cache
+           #(dissco % number)))
+  (defn cache-inspect []
+    @cache))
 
 (defn create-datasource []
   (delay (jdbc/get-datasource db)))
@@ -53,14 +62,10 @@
 (defn allocate-number-to-worker! [ds]
   (let [uuid        (java.util.UUID/randomUUID)
         next-number (get-first-available ds)]
-    (swap! primes-db
-           (fn [primes-col n]
-             (assoc primes-col n {:processing true
-                                  :proc-id    uuid}))
-           next-number)
+    (cache-insert next-number uuid)
     {:proc-id uuid
      :number  next-number}))
 
 (defn update-number! [ds n is-prime]
   (ds-execute! ds "update prime set is_prime = ? where number = ?" is-prime n)
-  (swap! primes-db #(dissoc % n)))
+  (cache-delete n))
