@@ -13,7 +13,7 @@
                  (:host primeseeker-server)
                  ":"
                  (:port primeseeker-server)
-                 "/work")]
+                 "/api/work")]
     (-> url
         (client/get {:accept :edn})
         :body
@@ -25,7 +25,7 @@
                   (:host primeseeker-server)
                   ":"
                   (:port primeseeker-server)
-                  "/work")
+                  "/api/work")
         body (assoc n :prime? is-prime)]
     (client/post url
                  {:body         (pr-str body)
