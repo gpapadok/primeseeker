@@ -1,9 +1,7 @@
 (ns primeseeker.core
-  (:require [next.jdbc :as jdbc]
-            [primeseeker.routes :refer [handler]]
+  (:require [primeseeker.routes :refer [handler]]
             [integrant.core :as ig]
             [muuntaja.middleware :as muuntaja]
-            [reitit.ring.middleware.muuntaja :as rmuuntaja]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]))
 
