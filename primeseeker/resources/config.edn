@@ -1,1 +1,3 @@
-{:server/jetty {:port 3000}}
+{:server/jetty      {:port 3000}
+ :cache/invalidator {:expires-after 60 * 60 ; 1 hour
+                     :run-every     60 * 60}}

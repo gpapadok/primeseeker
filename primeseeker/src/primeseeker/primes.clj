@@ -20,13 +20,16 @@
   (delete! [this number] "Delete number")
   (inspect [this] "Get all"))
 
+(defn now [] (java.time.Instant/now))
+
 (defn- create-atom-cache []
   (let [cache (atom {})]
     (reify PrimesCache
       (insert! [this number uuid]
         (swap! cache
                #(assoc % number {:processing true
-                                 :proc-id    uuid})))
+                                 :proc-id    uuid
+                                 :started-at (now)})))
       (delete! [this number] (swap! cache #(dissoc % number)))
       (inspect [this] @cache))))
 
@@ -87,7 +90,7 @@
     (and (:processing db-entry) (= proc-id (:proc-id db-entry)))))
 
 (defn allocate-number-to-worker! [ds]
-  (let [uuid        (java.util.UUID/randomUUID)
+  (let [uuid        (random-uuid)
         next-number (get-first-available ds)]
     (cache-insert! next-number uuid)
     {:proc-id uuid
