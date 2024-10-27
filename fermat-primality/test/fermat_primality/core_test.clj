@@ -3,20 +3,20 @@
             [fermat-primality.core :as sut]))
 
 (defn- power2 [n]
-  (#'sut/power-bigint 2N n))
+  (reduce * (repeat n 2N)))
 
 (deftest bit-length-test
   (testing "Bit length test"
     (doseq [i (range 1 80)]
-      (is (= (#'sut/bit-length (inc (power2 i))) (inc i)))))
+      (is (= (inc i) (#'sut/bit-length (inc (power2 i)))))))
   (testing "Negative input test"
     (doseq [i (range 1 80)]
-      (is (= (#'sut/bit-length (- 0 (inc (power2 i)))) (inc i))))))
+      (is (= (inc i) (#'sut/bit-length (- 0 (inc (power2 i)))))))))
 
 (deftest rand-n-bits-test
   (testing "Test output upper bound"
     (doseq [i (range 80)]
-      (is (< (#'sut/rand-n-bits i) (power2 i)))))
+      (is (> (power2 i) (#'sut/rand-n-bits i)))))
   (testing "Test output type"
    (is (= clojure.lang.BigInt (class (#'sut/rand-n-bits 10)))))
   (testing "Exception"
@@ -25,23 +25,26 @@
 (deftest rand-bigint-test
   (testing "Test output bounds"
     (is (<= 0 (#'sut/rand-bigint 0 10) 10))
-    (is (<= 100 (#'sut/rand-bigint 200 300) 300))
+    (is (<= 100 (#'sut/rand-bigint 20 300) 300))
     (is (<= 123456789N (#'sut/rand-bigint 123456789N 567891234N) 567891234N)))
   (testing "Test output type"
-    (is (= (class (#'sut/rand-bigint 100N 1000N)) clojure.lang.BigInt)))
+    (is (= clojure.lang.BigInt (class (#'sut/rand-bigint 100N 1000N)))))
   (testing "Test bad input"
-    (is (= (#'sut/rand-bigint 5 2) 5))
-    (is (= (#'sut/rand-bigint 0 -10) 0))))
+    (is (= 5 (#'sut/rand-bigint 5 2)))
+    (is (= 0 (#'sut/rand-bigint 0 -10)))))
 
-(deftest power-bigint-test
+(deftest expmod-test
   (testing "Test output type"
-    (is (= (class (#'sut/power-bigint 10N 2N)) clojure.lang.BigInt)))
+    (is (=  clojure.lang.BigInt (class (#'sut/expmod 10N 2N 1024N)))))
   (testing "Test output value"
-    (is (= (#'sut/power-bigint 10N 2N) 100N))
-    (is (= (#'sut/power-bigint -10N 3N) -1000N))
-    (is (= (#'sut/power-bigint 10N 0N) 1N))
-    (is (= (#'sut/power-bigint 10N 1N) 10N))
-    (is (= (#'sut/power-bigint 10N -1N) 1N))))
+    (is (= 100N (#'sut/expmod 10N 2N 101N)))
+    (is (= 1N (#'sut/expmod 10N 0N 80N)))
+    (is (= 10N (#'sut/expmod 10N 1N 123N)))
+    (is (= 1024 (#'sut/expmod 2 10 2000))))
+  (testing "Invalid input"
+    (is (thrown? AssertionError (#'sut/expmod -10N 3N 10001N)))
+    (is (thrown? AssertionError (#'sut/expmod 10N -1N 2N)))
+    (is (thrown? AssertionError (#'sut/expmod 10N 1N -2N)))))
 
 (deftest probable-prime-test
   (testing "Test primality check"
@@ -52,7 +55,11 @@
     (is (not (sut/probable-prime? 6)))
     (is (sut/probable-prime? 17))
     (is (not (sut/probable-prime? 7917)))
-    (is (sut/probable-prime? 7919N)))
+    (is (sut/probable-prime? 7919N))
+    (is (sut/probable-prime? 32212254719N))
+    (is (not (sut/probable-prime? 4776913109852041418248056622882488317)))
+    (is (sut/probable-prime? 4776913109852041418248056622882488319))
+    (is (sut/probable-prime? 76745640142636677578016477075117615076923039213553)))
   (testing "Test negative input"
-    (is (not (sut/probable-prime? -1)))
-    (is (not (sut/probable-prime? -7919)))))
+    (is (thrown? AssertionError (sut/probable-prime? -1)))
+    (is (thrown? AssertionError (sut/probable-prime? -7919)))))
