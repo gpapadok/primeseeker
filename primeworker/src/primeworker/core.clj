@@ -3,41 +3,33 @@
             [clj-http.client :as client]
             [fermat-primality.core :refer [probable-prime?]]))
 
+(defn- request-work [server]
+  (-> (str server "/api/work")
+      (client/get {:accept :edn})
+      :body
+      edn/read-string))
 
-(def primeseeker-server {:host "localhost"
-                         :port 3000})
-
-(defn request-number
-  []
-  (let [url (str "http://"
-                 (:host primeseeker-server)
-                 ":"
-                 (:port primeseeker-server)
-                 "/api/work")]
-    (-> url
-        (client/get {:accept :edn})
-        :body
-        edn/read-string)))
-
-(defn send-result
-  [n is-prime]
-  (let [url  (str "http://"
-                  (:host primeseeker-server)
-                  ":"
-                  (:port primeseeker-server)
-                  "/api/work")
-        body (assoc n :prime? is-prime)]
-    (client/post url
+(defn- send-result [server n is-prime]
+  (let [body (assoc n :prime? is-prime)]
+    (client/post (str server "/api/work")
                  {:body         (pr-str body)
                   :content-type :edn
                   :accept       :edn})))
 
+(defn- work [server]
+  (let [get-number    (partial request-work server)
+        update-number (partial send-result server)]
+    (println "Connecting to" server "...")
+    (loop [n (get-number)]
+      (println "Fermat Primality Test for" (:number n))
+      (update-number n (probable-prime? (:number n) 1))
+      (println "Done...")
+      (recur (get-number)))))
+
 (defn -main
-  [& args]
-  (println "Starting PrimeSeek worker...")
-  (loop [n (request-number)]
-    (println "Beginning Fermat Primality Test for" (:number n))
-    (send-result n (probable-prime? (:number n) 1))
-    (println "Done...")
-    (println "Requesting next number.")
-    (recur (request-number))))
+  [& [host port :as args]]
+  (let [server        (str "http://"
+                           (or host "localhost")
+                           ":"
+                           (or port 3000))]
+    (work server)))
