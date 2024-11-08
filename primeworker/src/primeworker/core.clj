@@ -21,9 +21,8 @@
         update-number (partial send-result server)]
     (println "Connecting to" server "...")
     (loop [n (get-number)]
-      (println "Fermat Primality Test for" (:number n))
-      (update-number n (probable-prime? (:number n) 1))
-      (println "Done...")
+      (println "Testing" (:number n))
+      (update-number n (probable-prime? (:number n)))
       (recur (get-number)))))
 
 (defn -main
