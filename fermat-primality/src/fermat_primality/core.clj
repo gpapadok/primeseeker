@@ -1,9 +1,7 @@
 (ns fermat-primality.core)
 
 ;; Random Big Integer Generator
-(defn- bit-length
-  "Returns the number of bits for an integer"
-  [n]
+(defn- bit-length "Returns the number of bits for an integer" [n]
   (.bitLength (new java.math.BigInteger (str n))))
 
 (defn- rand-n-bits
@@ -30,7 +28,8 @@
         (even? n)              (expmod (mod (* a a) k) (/ n 2) k)
         :else                  (mod (* a (expmod a (dec n) k)) k)))
 
-(defn probable-prime? "Is this a prime (probably)? - Perform a Fermat primality test"
+(defn probable-prime?
+  "Is this a prime (probably)? - Perform a Fermat primality test"
   ([n] (if (even? n)
          (= n 2)
          (probable-prime? n 30)))

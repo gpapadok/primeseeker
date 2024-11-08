@@ -18,7 +18,7 @@
     (doseq [i (range 80)]
       (is (> (power2 i) (#'sut/rand-n-bits i)))))
   (testing "Test output type"
-   (is (= clojure.lang.BigInt (class (#'sut/rand-n-bits 10)))))
+    (is (= clojure.lang.BigInt (class (#'sut/rand-n-bits 10)))))
   (testing "Exception"
     (is (thrown? IllegalArgumentException (#'sut/rand-n-bits -10)))))
 
