@@ -1,1 +1,1 @@
-Fermat primality test implementation in Clojure for Big Integers
+Fermat primality test implementation in Clojure.
