@@ -1,1 +1,1 @@
-drop table if exists prime
+drop table if exists natnum

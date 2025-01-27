@@ -22,3 +22,9 @@
         migration-filename (partial str (current-ts) "-")]
     (spit (migration-file (migration-filename name ".up.sql")) "")
     (spit (migration-file (migration-filename name ".down.sql")) "")))
+
+(defn rollback []
+  (repl/rollback config))
+
+(defn migrate []
+  (repl/migrate config))

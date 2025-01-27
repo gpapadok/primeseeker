@@ -1,1 +1,1 @@
-delete from prime where number in (2, 3, 5)
+delete from natnum where num in (2, 3, 5)

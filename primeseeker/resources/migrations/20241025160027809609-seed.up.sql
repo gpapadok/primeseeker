@@ -1,2 +1,5 @@
-insert or ignore into prime (number, is_prime)
-values (2, true), (3, true), (5, null)
+insert or ignore into natnum (num, is_prime, created_at, processed_at)
+values
+    (2, true, datetime('now'), datetime('now')),
+    (3, true, datetime('now'), datetime('now')),
+    (5, null, datetime('now'), null)
