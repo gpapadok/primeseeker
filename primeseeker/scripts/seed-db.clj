@@ -1,5 +1,5 @@
 (ns user
-  (:require [ragtime.jdbc :as jdbc]
+  (:require [ragtime.jdbc :as rjdbc]
             [ragtime.repl :as repl]))
 
 (def db {:dbtype "sqlite" :dbname "primes"})
