@@ -1,17 +1,11 @@
 (ns primeseeker.primes
   (:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
-            [taoensso.telemere :as t]))
-
-;;; DB ;;;
-(def db {:dbtype "sqlite" :dbname "primes"})
+            [taoensso.telemere :as t]
+            [primeseeker.store :as store]))
 
 (defn create-datasource []
-  (delay (jdbc/get-datasource db)))
-
-(defn- ds-execute! [ds & query]
-  (jdbc/execute! @ds query {:builder-fn rs/as-unqualified-kebab-maps}))
-;;;;;;;;;;
+  (store/create-sqlite-datasource))
 
 ;;; CACHE ;;;
 (defprotocol PrimesCache
@@ -54,28 +48,19 @@
   ((. *cache* inspect) n))
 ;;;;;;;;;;;;;;
 
-(defn- index-db [ds n]
-  (ds-execute! ds "select * from prime where number = ?" n))
-
 (defn get-all-numbers [ds]
-  (ds-execute! ds "select * from prime"))
-
-(defn- add-number! [ds p]
-  (ds-execute! ds "insert into prime (number, is_prime) values (?, null)" p))
-
-(defn- all-numbers [ds]
-  (mapv :number (ds-execute! ds "select number from prime")))
+  (store/get-all-numbers ds))
 
 (defn- create-and-add-number! [ds]
-  (let [numbers     (all-numbers ds)
-        max-n       (apply max numbers)
+  (let [numbers     (store/all-numbers ds)
+        max-n       (if (empty? numbers) 1 (apply max numbers))
         next-number (+ max-n 2)]
-    (add-number! ds next-number)
+    (store/add-number! ds next-number)
     next-number))
 
 (defn- first-available [ds]
-  (let [unprocessed (->> (ds-execute! ds "select number from prime where is_prime is null")
-                         (mapv :number)
+  (let [unprocessed (->> (store/get-untested-numbers ds)
+                         (mapv :num)
                          set)
         processing  (cache-all-processing)
         available   (clojure.set/difference unprocessed
@@ -97,5 +82,5 @@
      :number  next-number}))
 
 (defn update-number! [ds n is-prime]
-  (ds-execute! ds "update prime set is_prime = ? where number = ?" is-prime n)
+  (store/update-tested-number! ds n is-prime)
   (cache-delete! n))
