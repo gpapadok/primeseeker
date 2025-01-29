@@ -2,40 +2,20 @@
   (:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]
             [taoensso.telemere :as t]
-            [primeseeker.store :as store]))
+            [primeseeker.store :as store]
+            [primeseeker.cache :as cache]))
 
-(defn create-datasource []
-  (store/create-sqlite-datasource))
-
-;;; CACHE ;;;
-(defprotocol PrimesCache
-  "Cache to store numbers being processed to evaluate primality"
-  (insert! [this number uuid] "Insert number")
-  (delete! [this number] "Delete number")
-  (inspect [this] "Get all"))
-
-(defn now [] (java.time.Instant/now))
-
-(defn- create-atom-cache []
-  (let [cache (atom {})]
-    (reify PrimesCache
-      (insert! [this number uuid]
-        (swap! cache
-               #(assoc % number {:processing true
-                                 :proc-id    uuid
-                                 :started-at (now)})))
-      (delete! [this number] (swap! cache #(dissoc % number)))
-      (inspect [this] @cache))))
+(def create-datasource store/create-sqlite-datasource)
 
 ;; NOTE: Method calls on this only work with dot operator for some reason
-(def ^:dynamic *cache* (create-atom-cache))
+(def ^:dynamic *cache* (cache/create-atom-cache))
 
 (defn- cache-insert! [number uuid]
-  (t/log! :info ["Cache - number cached (v2):" number])
+  ;; (t/log! :info ["Cache - number cached (v2):" number])
   (. *cache* insert! number uuid))
 
 (defn- cache-delete! [number]
-  (t/log! :info ["Cache - number deleted (v2):" number])
+  ;; (t/log! :info ["Cache - number deleted (v2):" number])
   (. *cache* delete! number))
 
 (defn- cache-all-processing []
@@ -46,7 +26,6 @@
 
 (defn- cache-get [n]
   ((. *cache* inspect) n))
-;;;;;;;;;;;;;;
 
 (defn get-all-numbers [ds]
   (store/get-all-numbers ds))
