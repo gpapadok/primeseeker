@@ -17,17 +17,19 @@
   (jdbc/execute! ds query {:builder-fn rs/as-unqualified-kebab-maps}))
 
 (defn create-sqlite-datasource []
-  (let [ds (jdbc/get-datasource db)]
-    (reify PrimesStore
-      (index-ds [_ n]
-        (ds-execute! ds "select * from natnum where num = ?" n))
-      (get-all-numbers [_]
-        (ds-execute! ds "select * from natnum"))
-      (add-number! [_ p]
-        (ds-execute! ds "insert into natnum (num, is_prime, created_at) values (?, null, datetime('now'))" p))
-      (all-numbers [_]
-        (mapv :num (ds-execute! ds "select num from natnum")))
-      (get-untested-numbers [_]
-        (ds-execute! ds "select num from natnum where is_prime is null"))
-      (update-tested-number! [_ n is-prime]
-        (ds-execute! ds "update natnum set is_prime = ?, processed_at = datetime('now') where num = ?" is-prime n)))))
+  (jdbc/get-datasource db))
+
+(extend-type javax.sql.DataSource
+  PrimesStore
+  (index-ds [ds n]
+    (ds-execute! ds "select * from natnum where num = ?" n))
+  (get-all-numbers [ds]
+    (ds-execute! ds "select * from natnum"))
+  (add-number! [ds p]
+    (ds-execute! ds "insert into natnum (num, is_prime, created_at) values (?, null, datetime('now'))" p))
+  (all-numbers [ds]
+    (mapv :num (ds-execute! ds "select num from natnum")))
+  (get-untested-numbers [ds]
+    (ds-execute! ds "select num from natnum where is_prime is null"))
+  (update-tested-number! [ds n is-prime]
+    (ds-execute! ds "update natnum set is_prime = ?, processed_at = datetime('now') where num = ?" is-prime n)))
