@@ -50,17 +50,6 @@
 (defmethod ig/halt-key! :cache/invalidator [_ f]
   (future-cancel f))
 
-(defn go [& args]
-  (prn config)
-  (def system
-    (ig/init config)))
-
-(defn halt! [& args]
-  (ig/halt! system))
-
-(defn reset [& args]
-  (halt!) (go))
-
 (defn -main
   [& args]
-  (go))
+  (ig/init config))
