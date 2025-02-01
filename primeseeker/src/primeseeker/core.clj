@@ -12,6 +12,7 @@
   (ig/read-string (slurp "resources/config.edn")))
 
 ;;; Util ;;;
+;; TODO: Move to util.clj
 (defmacro do-return [form & body]
   `(let [res# ~form]
      ~@body

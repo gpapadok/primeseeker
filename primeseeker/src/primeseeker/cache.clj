@@ -6,7 +6,7 @@
   (delete! [this number] "Delete number")
   (inspect [this] "Get all"))
 
-(defn now [] (java.time.Instant/now))
+(defn now [] (java.time.Instant/now)) ; TODO: Move to util
 
 (defn create-atom-cache []
   (let [cache (atom {})]
