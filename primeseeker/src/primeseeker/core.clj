@@ -5,7 +5,8 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
-            [primeseeker.primes :refer [*cache* now]]))
+            [primeseeker.primes :refer [*cache*]]
+            [primeseeker.cache :refer [now]]))
 
 (def config
   (ig/read-string (slurp "resources/config.edn")))
