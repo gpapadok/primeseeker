@@ -6,22 +6,10 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
             [primeseeker.primes :refer [*cache*]]
-            [primeseeker.cache :refer [now]]))
+            [primeseeker.util :refer [do-return now]]))
 
 (def config
   (ig/read-string (slurp "resources/config.edn")))
-
-;;; Util ;;;
-;; TODO: Move to util.clj
-(defmacro do-return [form & body]
-  `(let [res# ~form]
-     ~@body
-     res#))
-
-(defn dump [x]
-  (prn x)
-  x)
-;;;;;;;;;;;;
 
 (defmethod ig/init-key :server/jetty [_ {:keys [port] :as opts}]
   (do-return (jetty/run-jetty

@@ -1,12 +1,11 @@
-(ns primeseeker.cache)
+(ns primeseeker.cache
+  (:require [primeseeker.util :refer [now]]))
 
 (defprotocol PrimesCache
   "Cache to store numbers being processed to evaluate primality"
   (insert! [this number uuid] "Insert number")
   (delete! [this number] "Delete number")
   (inspect [this] "Get all"))
-
-(defn now [] (java.time.Instant/now)) ; TODO: Move to util
 
 (defn create-atom-cache []
   (let [cache (atom {})]
