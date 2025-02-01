@@ -5,11 +5,9 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
+            [primeseeker.config :refer [config]]
             [primeseeker.primes :refer [*cache*]]
             [primeseeker.util :refer [do-return now]]))
-
-(def config
-  (ig/read-string (slurp "resources/config.edn")))
 
 (defmethod ig/init-key :server/jetty [_ {:keys [port] :as opts}]
   (do-return (jetty/run-jetty

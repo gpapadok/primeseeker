@@ -1,5 +1,6 @@
 (ns user
-  (:require [primeseeker.core :refer [config]]
+  (:require [primeseeker.core]
+            [primeseeker.config :refer [config]]
             [integrant.repl :as repl]
             [integrant.core :as ig]))
 
