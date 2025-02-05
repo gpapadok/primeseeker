@@ -1,9 +1,9 @@
 (ns primeseeker.core
-  (:require [primeseeker.routes :refer [handler]]
-            [integrant.core :as ig]
+  (:require [integrant.core :as ig]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
+            [primeseeker.routes :refer [handler]]
             [primeseeker.config :refer [config]]
             [primeseeker.primes :refer [*cache*]]
             [primeseeker.util :refer [do-return now]]))
