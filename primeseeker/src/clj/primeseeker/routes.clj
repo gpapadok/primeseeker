@@ -1,6 +1,7 @@
 (ns primeseeker.routes
   (:require [primeseeker.api :as api]
             [primeseeker.primes :refer [create-datasource]]
+            [muuntaja.middleware]
             [reitit.ring :as reitit]))
 
 (def routes
@@ -23,4 +24,5 @@
   (reitit/ring-handler
    (reitit/router routes)
    (constantly {:status 404 :body {:message "Not found"}})
-   {:middleware [wrap-datasource]}))
+   {:middleware [wrap-datasource
+                 muuntaja.middleware/wrap-format]}))

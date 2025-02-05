@@ -1,7 +1,6 @@
 (ns primeseeker.core
   (:require [primeseeker.routes :refer [handler]]
             [integrant.core :as ig]
-            [muuntaja.middleware :as muuntaja]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
@@ -11,9 +10,7 @@
 
 (defmethod ig/init-key :server/jetty [_ {:keys [port] :as opts}]
   (do-return (jetty/run-jetty
-              (-> handler
-                  muuntaja/wrap-format
-                  wrap-reload)
+              (wrap-reload #'handler) ; Move to dev
               {:port  port
                :join? false})
     (t/log! :info ["Server started at port" port])))
