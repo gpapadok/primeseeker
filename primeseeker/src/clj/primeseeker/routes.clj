@@ -8,12 +8,12 @@
             [ring.middleware.keyword-params]
             [primeseeker.api :as api]
             [primeseeker.handlers.view :as handlers.view]
-            [primeseeker.primes :refer [create-datasource]]))
+            [primeseeker.primes :refer [create-datasource]]
+            [primeseeker.spec :as s]))
 
 (def routes
   [["/primes" {:get {:name       :get-primes
-                     :coercion   reitit.coercion.spec/coercion
-                     :parameters {:query {:limit int? :offset int?}}
+                     :parameters {:query ::s/pagination}
                      :handler    handlers.view/primes}}]
    ["/api"
     ["" {:get api/index}]
