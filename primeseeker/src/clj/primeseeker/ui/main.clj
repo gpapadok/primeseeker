@@ -16,6 +16,7 @@
              :content "Giorgos Papadokostakis"}]
      [:script {:src "https://cdn.tailwindcss.com"}] ; Remove tailwind from cdn
      ]
-    [:body
-     (navbar)
-     body]]))
+    [:body.m-10.bg-stone-100
+     [:div.flex
+      (navbar)
+      [:div.flex body]]]]))
