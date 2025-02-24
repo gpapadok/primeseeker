@@ -9,6 +9,7 @@
   (add-number! [ds p] "Insert a number to be processed.")
   (all-numbers [ds] "Get all numbers as vector.")
   (get-primes [ds limit offset] "Get only prime numbers.")
+  (count-primes [ds] "Count all primes discovered.")
   (get-untested-numbers [ds] "Get only numbers that have not been tested for primality.")
   (update-tested-number! [ds n is-prime] "Update number with result of primality test."))
 
@@ -23,6 +24,9 @@
 (def get-primes-query
   "select * from natnum where is_prime = true order by num asc limit ? offset ?")
 
+(def count-primes-query
+  "select count(*) from natnum where is_prime = true")
+
 ;; TODO: Move queries out of functions
 (extend-type javax.sql.DataSource
   PrimesStore
@@ -34,6 +38,8 @@
     (ds-execute! ds "insert into natnum (num, is_prime, created_at) values (?, null, datetime('now'))" p))
   (get-primes [ds limit offset]
     (ds-execute! ds get-primes-query limit offset))
+  (count-primes [ds]
+    (ds-execute! ds count-primes-query))
   (all-numbers [ds]
     (mapv :num (ds-execute! ds "select num from natnum")))
   (get-untested-numbers [ds]
