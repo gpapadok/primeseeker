@@ -33,7 +33,8 @@
                   [:tr {:class "last:border-b-2 last:border-zinc-300"}
                    [:td.border-x-2.border-zinc-300.p-4
                     (str (:num p))]
-                   [:td.border-x-2.border-zinc-300.p-4 (:processed-at p)]])
+                   [:td.border-x-2.border-zinc-300.p-4
+                    (:processed-at p)]])
                 primes))]
    [:div.flex
     [:button.p-3.text-2xl
