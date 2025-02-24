@@ -3,6 +3,9 @@
             [primeseeker.primes :as store]))
 
 (defn primes [{:keys [params datasource] :as req}]
-  {:body (str (ui.primes/primes
-               (store/get-primes datasource params)))
-   :status 200})
+  (let [n-primes (store/count-primes datasource)
+        primes   (store/get-primes datasource params)]
+    {:body   (str (ui.primes/primes
+                   primes
+                   (assoc params :count n-primes)))
+     :status 200}))
