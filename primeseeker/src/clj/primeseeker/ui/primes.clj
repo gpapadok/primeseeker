@@ -48,7 +48,7 @@
       ">>"]]]])
 
 (defn primes [primes {:keys [limit offset count]
-                      :or {limit 20 offset 0}
+                      :or {limit "20" offset "0"}
                       :as pagination}] ;; [{:num 10 :processed-at timestamp}]
   (main (primes-table primes
                       (Integer/parseInt limit) ; TODO: coercion
