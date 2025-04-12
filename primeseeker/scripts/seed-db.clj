@@ -1,13 +1,13 @@
 (ns user
   (:require [ragtime.jdbc :as rjdbc]
-            [ragtime.repl :as repl]))
+            [ragtime.repl]))
 
-(def db {:dbtype "sqlite" :dbname "primes"})
-(def test-db {:dbtype "sqlite" :dbname "primes-test"})
+(def db {:dbtype "sqlite" :dbname "primes.db"})
+(def test-db {:dbtype "sqlite" :dbname "primes-test.db"})
 
 (def migrations-dir "resources/migrations")
 
-(def config
+(def migrations-config
   {:datastore (rjdbc/sql-database db)
    ;; NOTE: Only works with relative for some reason
    :migrations (rjdbc/load-resources (str "../" migrations-dir))})
@@ -24,7 +24,7 @@
     (spit (migration-file (migration-filename name ".down.sql")) "")))
 
 (defn rollback []
-  (repl/rollback config))
+  (ragtime.repl/rollback migrations-config))
 
 (defn migrate []
-  (repl/migrate config))
+  (ragtime.repl/migrate migrations-config))
