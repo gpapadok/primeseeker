@@ -30,6 +30,17 @@
 (defn get-all-numbers [ds]
   (store/get-all-numbers ds))
 
+(defn get-primes [ds & {:keys [limit offset]
+                        :or {limit 20 offset 0}
+                        :as pagination}]
+  (store/get-primes ds limit offset))
+
+(defn count-primes [ds]
+  (-> (store/count-primes ds)
+      first
+      vals
+      first))
+
 (defn- create-and-add-number! [ds]
   (let [numbers     (store/all-numbers ds)
         max-n       (if (empty? numbers) 1 (apply max numbers))
