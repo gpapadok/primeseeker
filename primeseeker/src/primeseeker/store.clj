@@ -11,7 +11,7 @@
   (get-untested-numbers [ds] "Get only numbers that have not been tested for primality.")
   (update-tested-number! [ds n is-prime] "Update number with result of primality test."))
 
-(def db {:dbtype "sqlite" :dbname "primes"})
+(def db {:dbtype "sqlite" :dbname "primes.db"})
 
 (defn- ds-execute! [ds & query]
   (jdbc/execute! ds query {:builder-fn rs/as-unqualified-kebab-maps}))
