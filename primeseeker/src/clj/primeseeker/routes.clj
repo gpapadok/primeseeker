@@ -15,6 +15,8 @@
   [["/primes" {:get {:name       :get-primes
                      :parameters {:query ::s/pagination}
                      :handler    handlers.view/primes}}]
+   ["/work" {:get {:name    :work
+                   :handler handlers.view/work-view}}]
    ["/api"
     ["" {:get api/index}]
     ["/primes" {:get {:name    :get-primes-db

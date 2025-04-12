@@ -6,7 +6,7 @@
    [:div.text-zinc-800.m-5
     [:div.m-3.p-1
      [:a.p-2.rounded-xl {:class "hover:bg-stone-400 hover:text-stone-300"
-                         :href  "#"}
+                         :href  "/primes"}
       "Primes"]]
     [:div.m-3.p-1
      [:a.p-2.rounded-xl {:class "hover:bg-stone-400 hover:text-stone-300"
@@ -14,5 +14,5 @@
       "In Testing"]]
     [:div.m-3.p-1
      [:a.p-2.rounded-xl {:class "hover:bg-stone-400 hover:text-stone-300"
-                         :href  "#"}
+                         :href  "/work"}
       "Work"]]]])
