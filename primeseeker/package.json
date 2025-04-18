@@ -1,0 +1,8 @@
+{
+    "name": "primeseeker",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "shadow-cljs": "2.28.19"
+    }
+}

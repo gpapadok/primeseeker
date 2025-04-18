@@ -1,0 +1,3 @@
+* Primeseeker
+
+Distributed Fermat primality test for large prime numbers implemented in Clojure.

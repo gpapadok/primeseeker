@@ -1,0 +1,45 @@
+* Product
+
+** User Stories
+
+*** Query prime database
+- User should be able to see all the primes found so far
+- Order ascending or descenting. Filter with types.
+- Fetch a random large prime.
+
+*** Test numbers for primality
+- Test primes on the browser.
+
+* Technical
+
+** Project layout
+
+primeseeker.routes.api
+primeseeker.routes.views
+primeseeker.util
+primeseeker.cache
+primeseeker.store
+primeseeker.primes
+primeseeker.config
+primeseeker.core
+primeseeker.handlers.api
+primeseeker.handlers.views
+primeseeker.ui.primes
+primeseeker.ui.main
+primeseeker.ui.navbar
+
+- Don't like primeseeker.primes
+
+** UI Design
+
+*** Navbar
+Primes - Testing - Work
+
+*** One view to browse all primes
+All primes found so far. Paginated. Sorted asc/desc. One random big prime.
+
+*** One view to browse all numbers being processed
+All numbers currently with a worker. Their uuid and maybe some worker ID.
+
+*** One view with a button to work
+Button to work. Displays current number. All numbers processed. Primes found so far.
