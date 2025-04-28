@@ -1,5 +1,5 @@
 {:paths
- ["src/clj" "resources" "scripts" "dev"]
+ ["src/clj" "src/cljs" "resources" "scripts" "dev"]
 
  :deps
  {org.clojure/clojure               {:mvn/version "1.11.1"}
@@ -12,7 +12,10 @@
   org.xerial/sqlite-jdbc            {:mvn/version "3.49.1.0"}
   com.taoensso/telemere             {:mvn/version "1.0.0-alpha7"}
   dev.weavejester/ragtime           {:mvn/version "0.9.4"}
-  hiccup/hiccup                     {:mvn/version "2.0.0-RC3"}}
+  hiccup/hiccup                     {:mvn/version "2.0.0-RC3"}
+  ;; clojurescript
+  thheller/shadow-cljs              {:mvn/version "2.28.23"}
+  }
 
  :aliases
  {:run {:main-opts ["--main" "primeseeker.core"]}
