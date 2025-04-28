@@ -49,7 +49,10 @@
     {:data {:compile    reitit.coercion/compile-request-coercers
             :coercion   reitit.coercion.spec/coercion
             :middleware [reitit.ring.coercion/coerce-request-middleware]}})
-   (constantly {:status 404 :body {:message "Not found"}})
+   (reitit.ring/routes
+    (reitit.ring/create-file-handler {:path "/" :root "public"})
+    (reitit.ring/create-default-handler
+     {:not-found (constantly {:status 404 :body {:message "Not found"}})}))
    {:middleware
     [muuntaja.middleware/wrap-format
      wrap-datasource
