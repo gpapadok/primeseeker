@@ -12,5 +12,5 @@
      :status 200}))
 
 (defn work-view [req]
-  {:body (str (ui.work/work-view))
+  {:body (str (ui.work/work))
    :status 200})
