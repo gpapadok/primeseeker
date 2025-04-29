@@ -3,4 +3,6 @@
  {:app {:target     :browser
         :output-dir "public/js"
         :asset-path "/js"
-        :modules    {:main {:entries [primeseeker.core]}}}}}
+        :modules    {:main {:entries [primeseeker.ajax
+                                      primeseeker.work
+                                      primeseeker.fermat-primality]}}}}}
