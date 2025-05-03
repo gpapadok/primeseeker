@@ -39,9 +39,6 @@
 (defn- !dec [n]
   (- n !1))
 
-(defn- !zero? [n]
-  (= n !0))
-
 (defn- expmod "a ^ n mod k" [a n k]
   (cond (or (= a !1) (= n !0)) !1
         (!even? n)             (expmod (mod (* a a) k) (/ n !2) k)
@@ -51,10 +48,10 @@
   "Is this a prime (probably)? - Perform a Fermat primality test"
   ([n] (if (!even? n)
          (= n !2)
-         (probable-prime? n !30)))
+         (probable-prime? n 30)))
   ([n k]
    (let [a   (!rand-int !2 (- n !1))
          one (expmod a (!dec n) n)]
      (cond (not (= one !1)) false
-           (!zero? k)       true
-           :else           (recur n (!dec k))))))
+           (zero? k)       true
+           :else           (recur n (dec k))))))
