@@ -5,9 +5,15 @@
 (def !2 (js/BigInt 2))
 (def !30 (js/BigInt 30))
 
-(defn dump [x] (prn x) x)
+(defn- !even? [n]
+  (= (mod n !2) !0))
 
-(defn !rand-int
+(defn- !dec [n]
+  (- n !1))
+
+;;;
+
+(defn rand-bigint
   ([high]
    (->> (str high)
         (reduce (fn [{:keys [<high digits] :as acc} digit]
@@ -29,15 +35,9 @@
         js/BigInt))
   ([low high]
    (assert (< low high))
-   (+ (!rand-int (- high low)) low)))
+   (+ (rand-bigint (- high low)) low)))
 
 ;;;
-
-(defn- !even? [n]
-  (= (mod n !2) !0))
-
-(defn- !dec [n]
-  (- n !1))
 
 (defn- expmod "a ^ n mod k" [a n k]
   (cond (or (= a !1) (= n !0)) !1
@@ -50,7 +50,7 @@
          (= n !2)
          (probable-prime? n 30)))
   ([n k]
-   (let [a   (!rand-int !2 (- n !1))
+   (let [a   (rand-bigint !2 (- n !1))
          one (expmod a (!dec n) n)]
      (cond (not (= one !1)) false
            (zero? k)       true
