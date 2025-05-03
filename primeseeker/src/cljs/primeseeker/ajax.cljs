@@ -1,8 +1,7 @@
 (ns primeseeker.ajax
   (:require [ajax.core :as ajax]))
 
-;; TODO: Maybe get this from document
-(def host "http://localhost:3000/api")
+(goog-define API_URL "")
 
 (defn- error-handler [error-response]
   (js/console.log error-response))
@@ -13,9 +12,9 @@
    :keywords?       true})
 
 (defn get< [uri opts]
-  (ajax/GET (str host uri)
+  (ajax/GET (str API_URL uri)
             (merge default-options opts)))
 
 (defn post [uri opts]
-  (ajax/POST (str host uri)
+  (ajax/POST (str API_URL uri)
              (merge default-options opts)))
