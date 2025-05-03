@@ -7,12 +7,15 @@
 (defn- error-handler [error-response]
   (js/console.log error-response))
 
-(defn get< [uri & opts]
-  (ajax/GET (str host uri)
-            (merge {:error-handler error-handler}
-                   opts)))
+(def default-options
+  {:error-handler   error-handler
+   :response-format :json
+   :keywords?       true})
 
-(defn post [uri & opts]
+(defn get< [uri opts]
+  (ajax/GET (str host uri)
+            (merge default-options opts)))
+
+(defn post [uri opts]
   (ajax/POST (str host uri)
-             (merge {:error-handler error-handler}
-                    opts)))
+             (merge default-options opts)))
