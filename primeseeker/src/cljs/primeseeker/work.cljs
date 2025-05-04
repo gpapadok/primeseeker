@@ -1,6 +1,6 @@
 (ns primeseeker.work
   (:require [primeseeker.ajax :as ajax]
-            [primeseeker.fermat-primality :refer [probable-prime?]]))
+            [fermat-primality.core :refer [probable-prime?]]))
 
 (def pause-work (atom false))
 

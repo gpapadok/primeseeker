@@ -5,5 +5,4 @@
         :asset-path      "/js"
         :closure-defines {primeseeker.ajax/API_URL #shadow/env ["PRIMESEEKER_API_URL" :default "http://localhost:3000/api"]}
         :modules         {:main {:entries [primeseeker.ajax
-                                           primeseeker.work
-                                           primeseeker.fermat-primality]}}}}}
+                                           primeseeker.work]}}}}}
