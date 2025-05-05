@@ -14,14 +14,12 @@
     {:status 404}))
 
 (defn update-number-status
-  [{datasource :datasource :as request}]
-  ;; TODO: properly coerce
-  (let [n        (get-in request [:body-params :number])
-        is-prime (get-in request [:body-params :prime?])
-        proc-id  (get-in request [:body-params :proc-id])
-        coerced-proc-id (if (uuid? proc-id) proc-id (java.util.UUID/fromString proc-id))
+  [{datasource :datasource parameters :parameters :as request}]
+  (let [n        (get-in parameters [:body :number])
+        is-prime (get-in parameters [:body :prime?])
+        proc-id  (get-in parameters [:body :proc-id])
         coerced-n  (if (string? n) (Integer/parseInt n) n)]
-    (if (primes/matching-number-proc-id coerced-n coerced-proc-id)
+    (if (primes/matching-number-proc-id coerced-n proc-id)
       (do
         (primes/update-number! datasource coerced-n is-prime)
         {:status 200

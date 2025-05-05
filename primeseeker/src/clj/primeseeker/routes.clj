@@ -23,11 +23,12 @@
                       :handler api/get-primes-db}}]
     ["/work" {:get  {:name    :allocate-number
                      :parameters {:query {:asstring ::s/asstring}}
+                     :responses {200 {:body {:number ::s/number :proc-id ::s/proc-id}}}
                      :handler api/allocate-number}
               :post {:name       :update-number
-                     :parameters {:body-params {:number nat-int?
-                                                :proc-id string?
-                                                :prime? boolean?}}
+                     :parameters {:body {:number ::s/number
+                                         :proc-id ::s/proc-id
+                                         :prime? ::s/prime?}}
                      :handler    api/update-number-status}}]]])
 
 (defn wrap-datasource [handler]
@@ -50,7 +51,8 @@
     routes
     {:data {:compile    reitit.coercion/compile-request-coercers
             :coercion   reitit.coercion.spec/coercion
-            :middleware [reitit.ring.coercion/coerce-request-middleware]}})
+            :middleware [reitit.ring.coercion/coerce-response-middleware
+                         reitit.ring.coercion/coerce-request-middleware]}})
    (reitit.ring/routes
     (reitit.ring/create-file-handler {:path "/" :root "public"})
     (reitit.ring/create-default-handler
