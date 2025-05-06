@@ -1,0 +1,10 @@
+* Primeseeker
+
+Distributed Fermat primality test for large finding prime numbers implemented in Clojure.
+
+A server generates natural numbers to be tested and serves them to workers. The workers run
+a Fermat primality test on them and announces the result to the server. The server then stores
+the tested numbers in an sqlite database.
+
+A ~hello world~ of distributed systems. Currently WIP. A browser client with a javascript worker to
+be implemented.
