@@ -6,5 +6,5 @@
   org.babashka/http-client          {:mvn/version "0.4.22"}
   fermat-primality/fermat-primality {:local/root "../fermat-primality"}}
 
- :aliases
- {:run {:main-opts ["--main" "primeworker"]}}}
+ :tasks
+ {work primeworker/-main}}
