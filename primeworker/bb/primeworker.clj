@@ -9,9 +9,16 @@
 
 (def *work-endpoint* "/api/work")
 
+(defn log [message]
+  (clojure.tools.logging/log :info message))
+
+(defn debug [message]
+  (clojure.tools.logging/log :debug message))
+
 (defn wrap-edn [request]
   (fn [& args]
     (let [response (apply request args)]
+      (debug ["Response received:" response])
       (if (not= (:status response) 200)
         {:message (str "Error fetching from " (:uri response))}
         (edn/read-string (:body response))))))
@@ -30,10 +37,10 @@
 (defn- work [url]
   (let [get-number    (partial request-work url)
         update-number (partial send-result url)]
-    (println "Connecting to" url "...")
     (loop [n (get-number)]
-      (println "Testing" (:number n))
-      (update-number n (probable-prime? (:number n)))
+      (let [is-prime? (probable-prime? (:number n))]
+        (log (str (:number n) " is prime -> " is-prime?))
+        (update-number n is-prime?))
       (recur (get-number)))))
 
 (defn -main
