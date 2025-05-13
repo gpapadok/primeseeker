@@ -1,5 +1,5 @@
 {:paths
- ["src"]
+ ["bb"]
 
  :deps
  {org.clojure/clojure               {:mvn/version "1.11.1"}
@@ -7,4 +7,4 @@
   fermat-primality/fermat-primality {:local/root "../fermat-primality"}}
 
  :aliases
- {:run {:main-opts ["--main" "primeworker.core"]}}}
+ {:run {:main-opts ["--main" "primeworker"]}}}

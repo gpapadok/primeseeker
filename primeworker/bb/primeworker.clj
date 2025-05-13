@@ -1,4 +1,4 @@
-(ns primeworker.core
+(ns primeworker
   (:require [clojure.edn :as edn]
             [babashka.http-client :as http]
             [babashka.cli :as cli]
