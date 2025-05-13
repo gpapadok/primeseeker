@@ -1,7 +1,11 @@
 (ns primeworker.core
   (:require [clojure.edn :as edn]
             [babashka.http-client :as http]
+            [babashka.cli :as cli]
             [fermat-primality.core :refer [probable-prime?]]))
+
+(def cli-options {:port {:default 3000 :coerce :long}
+                  :host {:default "localhost" :coerce :string}})
 
 (defn- request-work [server]
   (-> (str server "/api/work")
@@ -26,9 +30,6 @@
       (recur (get-number)))))
 
 (defn -main
-  [& [host port :as args]]
-  (let [server        (str "http://"
-                           (or host "localhost")
-                           ":"
-                           (or port 3000))]
-    (work server)))
+  [& args]
+  (let [opts (cli/parse-opts *command-line-args* {:spec cli-options})]
+    (work (format "http://%s:%s" (:host opts) (:port opts)))))
