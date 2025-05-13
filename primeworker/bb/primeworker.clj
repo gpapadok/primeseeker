@@ -7,23 +7,30 @@
 (def cli-options {:port {:default 3000 :coerce :long}
                   :host {:default "localhost" :coerce :string}})
 
-(defn- request-work [server]
-  (-> (str server "/api/work")
-      (http/get {:headers {:accept "application/edn"}})
-      :body
-      edn/read-string))
+(def *work-endpoint* "/api/work")
 
-(defn- send-result [server n is-prime]
-  (let [body (assoc n :prime? is-prime)]
-    (http/post (str server "/api/work")
-               {:body    (pr-str body)
-                :headers {:content-type "application/edn"
-                          :accept       "application/edn"}})))
+(defn wrap-edn [request]
+  (fn [& args]
+    (let [response (apply request args)]
+      (if (not= (:status response) 200)
+        {:message (str "Error fetching from " (:uri response))}
+        (edn/read-string (:body response))))))
 
-(defn- work [server]
-  (let [get-number    (partial request-work server)
-        update-number (partial send-result server)]
-    (println "Connecting to" server "...")
+(def get (wrap-edn #(http/get % {:headers {:accept "application/edn"}})))
+(def post (wrap-edn #(http/post %1 {:body    (pr-str %2)
+                                    :headers {:content-type "application/edn"
+                                              :accept       "application/edn"}})))
+
+(defn- request-work [url]
+  (get (str url *work-endpoint*)))
+
+(defn- send-result [url n is-prime]
+  (post (str url *work-endpoint*) (assoc n :prime? is-prime)))
+
+(defn- work [url]
+  (let [get-number    (partial request-work url)
+        update-number (partial send-result url)]
+    (println "Connecting to" url "...")
     (loop [n (get-number)]
       (println "Testing" (:number n))
       (update-number n (probable-prime? (:number n)))
