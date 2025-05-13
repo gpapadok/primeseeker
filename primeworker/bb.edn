@@ -1,10 +1,10 @@
 {:paths
- ["src"]
+ ["bb"]
 
  :deps
  {org.clojure/clojure               {:mvn/version "1.11.1"}
-  clj-http/clj-http                 {:mvn/version "3.12.3"}
+  org.babashka/http-client          {:mvn/version "0.4.22"}
   fermat-primality/fermat-primality {:local/root "../fermat-primality"}}
 
- :aliases
- {:run {:main-opts ["--main" "primeworker.core"]}}}
+ :tasks
+ {work primeworker/-main}}
