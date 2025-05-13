@@ -12,7 +12,7 @@
 (defn- send-result [server n is-prime]
   (let [body (assoc n :prime? is-prime)]
     (http/post (str server "/api/work")
-               {:body         (pr-str body)
+               {:body    (pr-str body)
                 :headers {:content-type "application/edn"
                           :accept       "application/edn"}})))
 
