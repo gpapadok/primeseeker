@@ -1,20 +1,20 @@
 (ns primeworker.core
   (:require [clojure.edn :as edn]
-            [babashka.http-client :as client]
+            [babashka.http-client :as http]
             [fermat-primality.core :refer [probable-prime?]]))
 
 (defn- request-work [server]
   (-> (str server "/api/work")
-      (client/get {:headers {:accept "application/edn"}})
+      (http/get {:headers {:accept "application/edn"}})
       :body
       edn/read-string))
 
 (defn- send-result [server n is-prime]
   (let [body (assoc n :prime? is-prime)]
-    (client/post (str server "/api/work")
-                 {:body         (pr-str body)
-                  :headers {:content-type "application/edn"
-                            :accept       "application/edn"}})))
+    (http/post (str server "/api/work")
+               {:body         (pr-str body)
+                :headers {:content-type "application/edn"
+                          :accept       "application/edn"}})))
 
 (defn- work [server]
   (let [get-number    (partial request-work server)
