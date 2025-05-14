@@ -82,6 +82,7 @@
         (even? n)              (expmod (mod (* a a) k) (/ n 2) k)
         :else                  (mod (* a (expmod a (dec n) k)) k)))
 
+;; TODO: Rename
 (defn probable-prime?
   "Is this a prime (probably)? - Perform a Fermat primality test"
   ([n] (if (even? n)
