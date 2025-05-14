@@ -1,5 +1,5 @@
 (ns primeseeker.config
   (:require [integrant.core :as ig]))
 
-(def config
+(defn config []
   (ig/read-string (slurp "resources/config.edn")))

@@ -40,4 +40,4 @@
 
 (defn -main
   [& args]
-  (ig/init config))
+  (ig/init (config)))
