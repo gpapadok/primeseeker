@@ -8,7 +8,6 @@
             [ring.middleware.keyword-params]
             [primeseeker.api :as api]
             [primeseeker.handlers.view :as handlers.view]
-            [primeseeker.primes :refer [create-datasource]]
             [primeseeker.spec :as s]))
 
 (def routes
@@ -31,10 +30,6 @@
                                          :prime? ::s/prime?}}
                      :handler    api/update-number-status}}]]])
 
-(defn wrap-datasource [handler]
-  (fn [request]
-    (handler (assoc request :datasource (create-datasource)))))
-
 (defn wrap-local-cors [handler]
   (fn [request]
     (let [origin   (-> request :headers (get "origin"))
@@ -45,7 +40,11 @@
                            (assoc headers "Access-Control-Allow-Origin" origin)))
         response))))
 
-(defn app []
+(defn app [system]
+  (letfn [(wrap-system [handler]
+            (fn [request]
+              (handler (merge request system))))]
+    ;; TODO: fmt
   (reitit.ring/ring-handler
    (reitit.ring/router
     routes
@@ -59,8 +58,8 @@
      {:not-found (constantly {:status 404 :body {:message "Not found"}})}))
    {:middleware
     [muuntaja.middleware/wrap-format
-     wrap-datasource
+     wrap-system
      wrap-local-cors
      ring.middleware.params/wrap-params
      ring.middleware.keyword-params/wrap-keyword-params
-     reitit.ring.coercion/coerce-request-middleware]}))
+     reitit.ring.coercion/coerce-request-middleware]})))

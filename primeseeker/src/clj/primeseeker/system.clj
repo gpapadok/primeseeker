@@ -5,7 +5,7 @@
             [taoensso.telemere :as t]
             [primeseeker.routes :refer [app]]
             [primeseeker.config :refer [config]]
-            [primeseeker.primes :refer [*cache*]]
+            [primeseeker.primes :refer [*cache* create-datasource]]
             [primeseeker.util :refer [do-return now]]))
 
 (defn initialize []
@@ -40,4 +40,7 @@
   (future-cancel f))
 
 (defmethod ig/init-key ::router [_ opts]
-  (app))
+  (app opts))
+
+(defmethod ig/init-key ::store [_ config]
+  (create-datasource))
