@@ -45,7 +45,7 @@
                            (assoc headers "Access-Control-Allow-Origin" origin)))
         response))))
 
-(def handler
+(defn app []
   (reitit.ring/ring-handler
    (reitit.ring/router
     routes

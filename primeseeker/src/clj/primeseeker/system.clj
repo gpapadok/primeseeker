@@ -3,7 +3,7 @@
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.telemere :as t]
-            [primeseeker.routes :refer [handler]]
+            [primeseeker.routes :refer [app]]
             [primeseeker.config :refer [config]]
             [primeseeker.primes :refer [*cache*]]
             [primeseeker.util :refer [do-return now]]))
@@ -11,9 +11,10 @@
 (defn initialize []
   (ig/init (config)))
 
-(defmethod ig/init-key ::jetty [_ {:keys [port] :as opts}]
+(defmethod ig/init-key ::jetty [_ {:keys [port handler] :as opts}]
   (do-return (jetty/run-jetty
-              (wrap-reload #'handler) ; Move to dev
+              ;; (wrap-reload #'handler) ; Move to dev
+              handler
               {:port  port
                :join? false})
     (t/log! :info ["Server started at port" port])))
@@ -37,3 +38,6 @@
 
 (defmethod ig/halt-key! ::cache-invalidator [_ f]
   (future-cancel f))
+
+(defmethod ig/init-key ::router [_ opts]
+  (app))
