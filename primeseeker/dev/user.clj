@@ -1,5 +1,5 @@
 (ns user
-  (:require [primeseeker.core]
+  (:require [primeseeker.system]
             [primeseeker.config :refer [config]]
             [integrant.repl :as repl]
             [integrant.repl.state :as state]

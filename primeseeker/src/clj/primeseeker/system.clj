@@ -1,4 +1,4 @@
-(ns primeseeker.core
+(ns primeseeker.system
   (:require [integrant.core :as ig]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
