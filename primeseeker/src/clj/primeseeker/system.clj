@@ -8,6 +8,9 @@
             [primeseeker.primes :refer [*cache*]]
             [primeseeker.util :refer [do-return now]]))
 
+(defn initialize []
+  (ig/init (config)))
+
 (defmethod ig/init-key :server/jetty [_ {:keys [port] :as opts}]
   (do-return (jetty/run-jetty
               (wrap-reload #'handler) ; Move to dev
@@ -34,7 +37,3 @@
 
 (defmethod ig/halt-key! :cache/invalidator [_ f]
   (future-cancel f))
-
-(defn -main
-  [& args]
-  (ig/init (config)))
