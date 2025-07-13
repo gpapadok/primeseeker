@@ -1,21 +1,25 @@
 (ns build
   (:require [clojure.tools.build.api :as build]))
 
-(def build-config
+(def config
+  "Configuration for building primeseeker"
   {:target-directory "target"
    :class-directory  "target/class"
    :project-basis    (build/create-basis {:project "deps.edn"})
    :main-namespace   'primeseeker.core
-   :uberjar          "target/primeseeker.jar"})
+   :uberjar          "target/primeseeker-standalone.jar"})
 
-(defn clean [_]
-  (build/delete {:path (:target-directory build-config)})
-  (println (format "Target directory \"%s\" removed." (:target-directory build-config))))
+(defn clean []
+  "Clean build target directory"
+  (let [directory (:target-directory config)]
+    (build/delete {:path directory})
+    (println (format "Target directory \"%s\" removed." directory))))
 
 (defn uberjar [_]
-  (clean nil)
+  "Build an uberjar for primeseeker"
+  (clean)
   (let [{:keys [class-directory main-namespace project-basis direct-linking uberjar]}
-        build-config]
+        config]
     (build/copy-dir {:src-dirs   ["src/clj" "src/cljs" "resources"]
                      :target-dir class-directory})
     (build/compile-clj {:class-dir    class-directory
