@@ -8,7 +8,8 @@
             [ring.middleware.keyword-params]
             [primeseeker.api :as api]
             [primeseeker.handlers.view :as handlers.view]
-            [primeseeker.spec :as s]))
+            [primeseeker.spec :as s]
+            [primeseeker.api.routes]))
 
 (def routes
   [["/primes" {:get {:name       :get-primes
@@ -16,19 +17,7 @@
                      :handler    handlers.view/primes}}]
    ["/work" {:get {:name    :work
                    :handler handlers.view/work-view}}]
-   ["/api"
-    ["" {:get api/index}]
-    ["/primes" {:get {:name    :get-primes-db
-                      :handler api/get-primes-db}}]
-    ["/work" {:get  {:name    :allocate-number
-                     :parameters {:query ::s/work-query}
-                     :responses {200 {:body {:number ::s/number :proc-id ::s/proc-id}}}
-                     :handler api/allocate-number}
-              :post {:name       :update-number
-                     :parameters {:body {:number ::s/number
-                                         :proc-id ::s/proc-id
-                                         :prime? ::s/prime?}}
-                     :handler    api/update-number-status}}]]])
+   primeseeker.api.routes/routes])
 
 (defn wrap-local-cors [handler]
   (fn [request]
