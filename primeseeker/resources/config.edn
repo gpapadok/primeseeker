@@ -2,5 +2,5 @@
                                         :handler #ig/ref :primeseeker.system/router}
  :primeseeker.system/cache-invalidator {:expires-after 3600 ; 1 hour
                                         :run-every     3600}
- :primeseeker.system/store             {:dbtype "sqlite" :dbname "primes.db"}
+ :primeseeker.system/store             {:dbtype "sqlite" :dbname #or [#env DB_FILE "primes.db"]}
  :primeseeker.system/router            {:datasource #ig/ref :primeseeker.system/store}}
