@@ -1,4 +1,4 @@
-(ns primeseeker.handlers.view
+(ns primeseeker.ui.handlers
   (:require [primeseeker.ui.primes :as ui.primes]
             [primeseeker.ui.work :as ui.work]
             [primeseeker.primes :as store]))

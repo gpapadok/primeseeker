@@ -7,7 +7,7 @@
             [ring.middleware.params]
             [ring.middleware.keyword-params]
             [primeseeker.api.handlers :as api]
-            [primeseeker.handlers.view :as handlers.view]
+            [primeseeker.ui.handlers :as handlers.view]
             [primeseeker.spec :as s]
             [primeseeker.api.routes]))
 
