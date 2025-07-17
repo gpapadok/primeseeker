@@ -6,7 +6,7 @@
             [reitit.coercion]
             [ring.middleware.params]
             [ring.middleware.keyword-params]
-            [primeseeker.api :as api]
+            [primeseeker.api.handlers :as api]
             [primeseeker.handlers.view :as handlers.view]
             [primeseeker.spec :as s]
             [primeseeker.api.routes]))

@@ -1,5 +1,5 @@
 (ns primeseeker.api.routes
-  (:require [primeseeker.api :as api]
+  (:require [primeseeker.api.handlers :as api]
             [primeseeker.spec :as s]))
 
 (def routes

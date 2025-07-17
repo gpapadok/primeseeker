@@ -1,4 +1,4 @@
-(ns primeseeker.api
+(ns primeseeker.api.handlers
   (:require [primeseeker.primes :as primes]))
 
 (defn index
