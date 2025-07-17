@@ -1,3 +1,6 @@
-{:server/jetty      {:port 3000}
- :cache/invalidator {:expires-after (* 60 60) ; 1 hour
-                     :run-every     (* 60 60)}}
+{:primeseeker.system/jetty             {:port    #or [#env PORT 3000]
+                                        :handler #ig/ref :primeseeker.system/router}
+ :primeseeker.system/cache-invalidator {:expires-after 3600 ; 1 hour
+                                        :run-every     3600}
+ :primeseeker.system/store             {:dbtype "sqlite" :dbname "primes.db"}
+ :primeseeker.system/router            {:datasource #ig/ref :primeseeker.system/store}}

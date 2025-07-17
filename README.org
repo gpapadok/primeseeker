@@ -1,3 +1,9 @@
 * Primeseeker
 
-Distributed Fermat primality test for large prime numbers implemented in Clojure.
+Distributed Fermat primality test for finding large prime numbers implemented in Clojure.
+
+A server generates natural numbers to be tested and serves them to workers. The workers run
+a Fermat primality test on them and announces the result to the server to be stored.
+
+A ~hello world~ of distributed systems. Currently WIP. A browser client with a javascript worker to
+be implemented.

@@ -14,6 +14,7 @@
       [:meta {:name    :author
               :content "Giorgos Papadokostakis"}]
       [:script {:src "https://cdn.tailwindcss.com"}] ; TODO: Remove tailwind from cdn
+      [:script {:src "js/main.js"}]
       ]
      [:body.m-10.bg-stone-100
       [:div.flex

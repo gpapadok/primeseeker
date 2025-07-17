@@ -1,5 +1,12 @@
 (ns primeseeker.config
-  (:require [integrant.core :as ig]))
+  (:require [aero.core :as aero]
+            [integrant.core :as ig]))
 
-(def config
-  (ig/read-string (slurp "resources/config.edn")))
+(defmethod aero/reader 'ig/ref
+  [_ _ value]
+  (ig/ref value))
+
+(defn config
+  ([] (config :dev))
+  ([profile]
+   (aero/read-config (clojure.java.io/resource "config.edn") {:profile profile})))

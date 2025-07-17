@@ -5,6 +5,12 @@
 (defn- power2 [n]
   (reduce * (repeat n 2N)))
 
+(defmacro is-repeatedly
+  "Tests wether the output of the function satisfies a predicate multiple times.
+  Good for testing stochastic functions."
+  [pred function]
+  `(is (every? ~pred (repeatedly 100 ~function))))
+
 (deftest bit-length-test
   (testing "Bit length test"
     (doseq [i (range 1 80)]
@@ -24,14 +30,15 @@
 
 (deftest rand-bigint-test
   (testing "Test output bounds"
-    (is (<= 0 (#'sut/rand-bigint 0 10) 10))
-    (is (<= 100 (#'sut/rand-bigint 20 300) 300))
-    (is (<= 123456789N (#'sut/rand-bigint 123456789N 567891234N) 567891234N)))
+    (is-repeatedly #(<= 0 % 10) #(#'sut/rand-bigint 0 10))
+    (is-repeatedly #(<= 0 % 10) #(#'sut/rand-bigint 0 10))
+    (is-repeatedly #(<= 20 % 300) #(#'sut/rand-bigint 20 300))
+    (is-repeatedly #(<= 123456789N % 567891234N) #(#'sut/rand-bigint 123456789N 567891234N)))
   (testing "Test output type"
     (is (= clojure.lang.BigInt (class (#'sut/rand-bigint 100N 1000N)))))
   (testing "Test bad input"
-    (is (= 5 (#'sut/rand-bigint 5 2)))
-    (is (= 0 (#'sut/rand-bigint 0 -10)))))
+    (is-repeatedly #(= 5 %) #(#'sut/rand-bigint 5 2))
+    (is-repeatedly #(= 0 %) #(#'sut/rand-bigint 0 -10))))
 
 (deftest expmod-test
   (testing "Test output type"

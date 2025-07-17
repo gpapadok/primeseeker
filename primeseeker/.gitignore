@@ -1,2 +1,6 @@
-primes
-primes-test
+primes.db
+primes-test.db
+
+node_modules/
+public/
+.shadow-cljs/

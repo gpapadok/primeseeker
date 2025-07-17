@@ -1,6 +1,7 @@
 .nrepl-port
 .cpcache/
-.dir-locals.el
+.tool-versions
+target/
 
 # emacs
 *~
