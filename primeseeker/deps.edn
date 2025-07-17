@@ -16,7 +16,7 @@
  :aliases
  {:run {:main-opts ["--main" "primeseeker.core"]}
 
-  :dev {:extra-paths ["dev" "scripts"]
+  :dev {:extra-paths ["dev"]
         :extra-deps  {integrant/repl          {:mvn/version "0.4.0"}
                       dev.weavejester/ragtime {:mvn/version "0.9.4"}}}
 
