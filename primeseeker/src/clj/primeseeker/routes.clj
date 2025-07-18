@@ -6,18 +6,16 @@
             [reitit.coercion]
             [ring.middleware.params]
             [ring.middleware.keyword-params]
-            [primeseeker.api.handlers :as api]
-            [primeseeker.ui.handlers :as handlers.view]
             [primeseeker.spec :as s]
-            [primeseeker.api.routes]))
+            [primeseeker.api.routes]
+            [primeseeker.ui.routes]))
 
 (def routes
-  [["/primes" {:get {:name       :get-primes
-                     :parameters {:query ::s/pagination}
-                     :handler    handlers.view/primes}}]
-   ["/work" {:get {:name    :work
-                   :handler handlers.view/work-view}}]
-   primeseeker.api.routes/routes])
+  (into
+   []
+   (concat
+    primeseeker.ui.routes/routes
+    primeseeker.api.routes/routes)))
 
 (defn wrap-local-cors [handler]
   (fn [request]
