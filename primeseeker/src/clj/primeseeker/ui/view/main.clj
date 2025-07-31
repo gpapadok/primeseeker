@@ -1,4 +1,4 @@
-(ns primeseeker.ui.main
+(ns primeseeker.ui.view.main
   (:require [primeseeker.ui.navbar :refer [navbar]]
             [hiccup2.core :as h]))
 
