@@ -28,6 +28,6 @@
        :body   {:message "Invalid id for number"}})))
 
 (defn get-primes-db
-  [{datasource :datasource :as request}]
+  [{datasource :datasource params :params :as request}]
   {:status 200
-   :body   (primes/get-all-numbers datasource)})
+   :body   (primes/get-all-numbers datasource params)})

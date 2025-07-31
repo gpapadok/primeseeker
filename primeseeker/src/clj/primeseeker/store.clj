@@ -21,6 +21,9 @@
 (defn create-sqlite-datasource []
   (jdbc/get-datasource db))
 
+(def get-all-numbers-query
+  "select * from natnum order by num asc limit ? offset ?")
+
 (def get-primes-query
   "select * from natnum where is_prime = true order by num asc limit ? offset ?")
 
@@ -32,8 +35,8 @@
   PrimesStore
   (index-ds [ds n]
     (ds-execute! ds "select * from natnum where num = ?" n))
-  (get-all-numbers [ds]
-    (ds-execute! ds "select * from natnum"))
+  (get-all-numbers [ds limit offset]
+    (ds-execute! ds get-all-numbers-query limit offset))
   (add-number! [ds p]
     (ds-execute! ds "insert into natnum (num, is_prime, created_at) values (?, null, datetime('now'))" p))
   (get-primes [ds limit offset]

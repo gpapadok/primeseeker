@@ -27,7 +27,9 @@
 (defn- cache-get [n]
   ((. *cache* inspect) n))
 
-(defn get-all-numbers [ds]
+(defn get-all-numbers [ds {:keys [limit offset]
+                           :or {limit 20 offset 0}
+                           :as pagination}]]
   (store/get-all-numbers ds))
 
 (defn get-primes [ds & {:keys [limit offset]
